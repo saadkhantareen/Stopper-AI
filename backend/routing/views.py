@@ -114,7 +114,7 @@ def routes_view(request):
                 eta = departure + timedelta(seconds=duration_seconds * fraction)
                 return _checkpoint_weather(point, eta, load_weight_lb)
 
-            with ThreadPoolExecutor(max_workers=10) as pool:
+            with ThreadPoolExecutor(max_workers=4) as pool:
                 checkpoints = list(pool.map(build, points))
 
             aggregates = aggregate_checkpoints(
@@ -201,7 +201,7 @@ def heatmap_view(request):
                 "intensity": int(risk),
             }
 
-        with ThreadPoolExecutor(max_workers=10) as pool:
+        with ThreadPoolExecutor(max_workers=4) as pool:
             result = list(pool.map(intensity_for, points))
         return Response(result)
     except (BadInputError, UpstreamError) as exc:
