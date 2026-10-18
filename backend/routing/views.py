@@ -208,3 +208,11 @@ def heatmap_view(request):
         return _error_response(exc)
     except Exception as exc:
         return Response({"error": f"Unexpected server error: {exc}"}, status=502)
+
+
+def health_view(request):
+    """Lightweight health check used by uptime pingers to keep the
+    free-tier host awake; performs no upstream calls."""
+    from django.http import JsonResponse
+
+    return JsonResponse({"status": "ok"})
